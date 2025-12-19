@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <description>IBM HealthCare(Provider) Agent - Get Doctor Names</description>
+    <environments>Default</environments>
+    <interviewLabel>IBM HealthCare(Provider) Agent - Get Doctor Names {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>IBM HealthCare(Provider) Agent - Get Doctor Names</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Fetch Doctor Names</description>
+        <name>Fetch_Doctor_Names</name>
+        <label>Fetch Doctor Names</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>true</assignNullValuesIfNoRecordsFound>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Doctor_Name__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Doctor_Department__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>requiredDepartment</elementReference>
+            </value>
+        </filters>
+        <object>Case</object>
+        <outputReference>fetchedDoctors</outputReference>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Doctor_Name__c</queriedFields>
+        <queriedFields>Doctor_Department__c</queriedFields>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Fetch_Doctor_Names</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>fetched doctors</description>
+        <name>fetchedDoctors</name>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Case</objectType>
+    </variables>
+    <variables>
+        <description>required department</description>
+        <name>requiredDepartment</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

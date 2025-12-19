@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <assignments>
+        <description>assign</description>
+        <name>assign_newly_created_mc_to_record_variable</name>
+        <label>assign newly created mc to record variable</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>newmcop</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>get_new_mc</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <description>get medical coding details from DMO</description>
+    <environments>Default</environments>
+    <interviewLabel>HealthCare( {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>HealthCare(Payer) Agent - get medical coding</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <description>create mc</description>
+        <name>create_new_mc</name>
+        <label>create new mc</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignRecordIdToReference>newmcid</assignRecordIdToReference>
+        <connector>
+            <targetReference>get_new_mc</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>Record_ID__c</field>
+            <value>
+                <elementReference>get_medical_coding.RECORD_ID__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>claim_number__c</field>
+            <value>
+                <elementReference>get_medical_coding.CLAIM_NUMBER__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>diagnosis_code__c</field>
+            <value>
+                <elementReference>get_medical_coding.DIAGNOSIS_CODE__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>line_number__c</field>
+            <value>
+                <elementReference>get_medical_coding.LINE_NUMBER__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>modifier__c</field>
+            <value>
+                <elementReference>get_medical_coding.MODIFIER__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>procedure_code__c</field>
+            <value>
+                <elementReference>get_medical_coding.PROCEDURE_CODE__c</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Case</object>
+    </recordCreates>
+    <recordLookups>
+        <description>get medical coding details from DMO</description>
+        <name>get_medical_coding</name>
+        <label>get medical coding</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>create_new_mc</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>RECORD_ID__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>incomingrecordnumber</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>watsonx_healthcare_MEDICAL_CODI_DDCF__dlm</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>get new mc</description>
+        <name>get_new_mc</name>
+        <label>get new mc</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>assign_newly_created_mc_to_record_variable</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>newmcid</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Case</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>get_medical_coding</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <description>incoming record number</description>
+        <name>incomingrecordnumber</name>
+        <dataType>Number</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <scale>0</scale>
+    </variables>
+    <variables>
+        <description>new mc id</description>
+        <name>newmcid</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <description>new mc op</description>
+        <name>newmcop</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Case</objectType>
+    </variables>
+</Flow>
